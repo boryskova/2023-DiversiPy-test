@@ -15,8 +15,7 @@ class Shape:
             return (int(self.answer[self.answer.index(point_name)+1]),
                     int(self.answer[self.answer.index(point_name)+2]))
         except ValueError as exc:
-            print('Coordinates for points have to be integers.')
-            sys.exit(str(exc))
+            raise ValueError('Coordinates for points have to be integers.') from exc
 
     def get_points_distance(self, point1, point2):
         """Method to calculate distance between two points."""
@@ -44,11 +43,10 @@ class Square(Shape):
         try:
             self.side = int(answer[-1])
         except ValueError as exc:
-            print('Square side have to be integer.')
-            sys.exit(str(exc))
+            raise ValueError('Square side have to be integer.') from exc
 
-        if self.side <= 0:
-            print('Square Side have to be greater than zero.')
+        if self.side < 0:
+            raise ValueError('Square Side have to be greater or equal to zero.')
 
         self.top_right = self.get_point('TopRight')
 
@@ -67,11 +65,10 @@ class Circle(Shape):
         try:
             self.radius = int(answer[-1])
         except ValueError as exc:
-            print('Circle radius have to be integer.')
-            sys.exit(str(exc))
+            raise ValueError('Circle radius have to be integer.') from exc
 
-        if self.radius <= 0:
-            print('Circle Radius have to be greater than zero.')
+        if self.radius < 0:
+            raise ValueError('Circle Radius have to be greater or equal to zero.')
 
         self.center = self.get_point('Center')
 

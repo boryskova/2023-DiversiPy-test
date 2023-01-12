@@ -23,13 +23,13 @@ class TestShape(TestCase):
     def test_get_point_exception(self):
         """Test get point with invalid coordinates."""
         answer = 'Rectangle TopRight 2 2 BottomLeft a 1'.split()
-        self.shape = Shape(answer)
 
-        with self.assertRaises(SystemExit) as exception_context:
+        with self.assertRaises(ValueError) as exception_context:
+            self.shape = Shape(answer)
             self.shape.get_point('BottomLeft')
         self.assertEqual(
             str(exception_context.exception),
-            "invalid literal for int() with base 10: 'a'"
+            "Coordinates for points have to be integers."
         )
 
     def test_get_points_distance(self):
@@ -65,15 +65,34 @@ class TestSquare(TestCase):
         """Test calculate square area."""
         self.assertEqual(self.square.get_area(), 1)
 
+    def test_negative_side(self):
+        """Test that negative square side raises Value error."""
+        answer = 'Square TopRight 1 1 Side -1'.split()
+
+        with self.assertRaises(ValueError) as exception_context:
+            self.square = Square(answer)
+        self.assertEqual(
+            str(exception_context.exception),
+            'Square Side have to be greater or equal to zero.'
+        )
+
+    def test_zero_side(self):
+        """Tets that zero square side is working correctly."""
+        answer = 'Square TopRight 1 1 Side 0'.split()
+        self.square = Square(answer)
+
+        self.assertEqual(self.square.get_area(), 0)
+        self.assertEqual(self.square.get_perimeter(), 0)
+
     def test_get_side_exception(self):
         """Test get square side with invalid value."""
         answer = 'Square TopRight 1 1 Side d'.split()
 
-        with self.assertRaises(SystemExit) as exception_context:
+        with self.assertRaises(ValueError) as exception_context:
             self.square = Square(answer)
         self.assertEqual(
             str(exception_context.exception),
-            "invalid literal for int() with base 10: 'd'"
+            "Square side have to be integer."
         )
 
 
@@ -92,15 +111,34 @@ class TestCircle(TestCase):
         """Test calculate circle area."""
         self.assertEqual(round(self.circle.get_area(),2), round(pi*3**2,2))
 
+    def test_negative_radius(self):
+        """Test that negative circle radius raises Value error."""
+        answer = 'Circle Center 1 1 Radius -3'.split()
+
+        with self.assertRaises(ValueError) as exception_context:
+            self.circle = Circle(answer)
+        self.assertEqual(
+            str(exception_context.exception),
+            'Circle Radius have to be greater or equal to zero.'
+        )
+
+    def test_zero_radius(self):
+        """Tets that zero circle radius is working correctly."""
+        answer = 'Circle Center 1 1 Radius 0'.split()
+        self.circle = Circle(answer)
+
+        self.assertEqual(self.circle.get_area(), 0)
+        self.assertEqual(self.circle.get_perimeter(), 0)
+
     def test_get_radius_exception(self):
         """Test get circle radius with invalid value."""
         answer = 'Circle Center 1 1 Radius -'.split()
 
-        with self.assertRaises(SystemExit) as exception_context:
+        with self.assertRaises(ValueError) as exception_context:
             self.circle = Circle(answer)
         self.assertEqual(
             str(exception_context.exception),
-            "invalid literal for int() with base 10: '-'"
+            "Circle radius have to be integer."
         )
 
 
